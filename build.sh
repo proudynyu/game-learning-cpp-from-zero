@@ -1,7 +1,9 @@
 #!/bin/bash
 
-libs=-luser32
-warnings="-Wno-writable-strings -Wno-format-security"
+std=-std=c++11
+libs="-luser32 -lopengl32"
+includes="-Ithird_party -Ithird_party/Include"
+warnings="-Wno-write-strings -Wno-format-security"
 name=gamelearning
 
 if [[ "$OSTYPE" == "win32" || "$OSTYPE" == "win64" ]]; then
@@ -10,4 +12,14 @@ if [[ "$OSTYPE" == "win32" || "$OSTYPE" == "win64" ]]; then
     name="$name.exe"
 fi
 
-g++ -g src/main.cpp -o $name $libs $warning
+echo "Building $name..."
+g++ $std $includes -g src/main.cpp -o $name $libs $warnings
+
+if [[ $? -ne 0 ]]; then
+    echo "Build failed."
+    exit 1
+fi
+
+echo "Build successful."
+echo "Running $name..."
+./$name

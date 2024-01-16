@@ -1,12 +1,16 @@
 #pragma once
 
 #include "platform.h"
+#include "engine_lib.h"
 
 // Windows
+#define APIENTRY
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
-#define NOMINMAX
+// #define NOMINMAX
 #include <windows.h>
+
+#include <glcorearb.h>
 
 // Windows Globals
 static HWND window;
@@ -72,5 +76,21 @@ void plataform_update_window()
 		TranslateMessage(&msg);
 		DispatchMessageA(&msg);
 	}
+}
+
+void* platform_load_gl_function(char* funcName) {
+    PROC proc = wglGetProcAddress(funcName);
+
+    if (!proc) {
+		static HMODULE module = LoadLibraryA("opengl32.dll");
+		proc = GetProcAddress(module, funcName);
+
+		if (!proc) {
+			SM_ASSERT(false, "Failed to load glCreateProgram");
+			return nullptr;
+		}
+    }
+
+	return (void*)proc;
 }
 #endif
