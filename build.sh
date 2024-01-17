@@ -1,7 +1,7 @@
 #!/bin/bash
 
 std=-std=c++11
-libs="-luser32 -lopengl32"
+libs="-luser32 -lopengl32 -lgdi32"
 includes="-Ithird_party -Ithird_party/Include"
 warnings="-Wno-write-strings -Wno-format-security"
 name=gamelearning
