@@ -16,6 +16,11 @@
 #define DEBUG_BREAK() __builtin_trap()
 #endif
 
+#define BIT(x) 1 << (x)
+#define KB(x) ((unsigned long long)x * 1024)
+#define MB(x) ((unsigned long long)KB(x) * 1024)
+#define GB(x) ((unsigned long long)MB(x) * 1024)
+
 // #############################
 //      Logging and Asserts
 // #############################
@@ -216,6 +221,14 @@ char *read_file(char *filePath, int *fileSize, char *buffer)
 char *read_file(char *filePath, int *fileSize, BumpAllocator *bumpAllocator)
 {
     char *file = nullptr;
+
+    bool fileExists = file_exists(filePath);
+
+    if (!fileExists)
+    {
+        SM_ERROR("File does not exist: %s", filePath);
+        return file;
+    }
 
     long fileSize2 = get_file_size(filePath);
 
